@@ -3,6 +3,7 @@
 #include<iostream>
 #include<list>
 #include<queue>
+#include<stack>
 
 using namespace std;
 
@@ -67,7 +68,8 @@ class weightedGraph {
             }
         }
 
-        void BFS(){
+        //Search Algorithms
+        void BFS(int startVal){
             bool visited[size]; //Visited Array
             queue<int> myQ; //BFS Queue
 
@@ -77,9 +79,9 @@ class weightedGraph {
             }
             
             //Initialize values
-            visited[0] = true;
-            myQ.push(0);
-            int nodeVal = 0;
+            visited[startVal] = true;
+            myQ.push(startVal);
+            int nodeVal = startVal;
 
             //BFS Algorithm
             while (!myQ.empty()){
@@ -95,30 +97,52 @@ class weightedGraph {
                 }
             }
         }
+        void DFS(int startVal){
+            bool visited[size]; //Visited Array
+            stack<int> myStack; //DFS Stack
+
+            //Set visited states to false
+            for (int i = 0; i < size; i++){
+                visited[i] = false;
+            }
+            
+            //Initialize values
+            visited[startVal] = true;
+            myStack.push(startVal);
+            int nodeVal = startVal;
+
+            while (!myStack.empty()){
+                nodeVal = myStack.top();
+                cout << myStack.top() << " -> ";
+                myStack.pop();
+
+                for (auto it : adjlist[nodeVal]) {
+                    if (!visited[it.first]){
+                        myStack.push(it.first);
+                        visited[it.first] = true;
+                    }
+                }
+            }
+        }
 };
 
 int main() {
     weightedGraph mygraph(10);
-    
+    mygraph.addEdge(3, 2, 20);
     mygraph.addEdge(0, 1, 20);
-    mygraph.addEdge(1, 4, 20);
-    mygraph.addEdge(4, 2, 20);
-    mygraph.addEdge(4, 7, 20);
-    mygraph.addEdge(2, 7, 20);
-    mygraph.addEdge(7, 9, 20);
-    mygraph.addEdge(7, 8, 20);
-    mygraph.addEdge(5, 9, 20);
+    mygraph.addEdge(2, 4, 20);
+    mygraph.addEdge(4, 3, 20);
+    mygraph.addEdge(1, 3, 20);
     mygraph.addEdge(5, 8, 20);
-    mygraph.addEdge(3, 0, 20);
-    mygraph.addEdge(3, 6, 20);
-    mygraph.addEdge(3, 5, 20);
-    mygraph.addEdge(6, 0, 20);
-    mygraph.addEdge(5, 6, 20);
+    mygraph.addEdge(6, 1, 20);
+    mygraph.addEdge(9, 4, 20);
+    mygraph.addEdge(0, 7, 20);
+    mygraph.addEdge(7, 2, 20);
+    mygraph.addEdge(8, 2, 20);
 
-    mygraph.BFS(); //Peform BFS
+    cout << "BFS: "; mygraph.BFS(3); cout << endl;  //Perform BFS
+    cout << "DFS: "; mygraph.DFS(3); cout << endl; //Perform DFS
     
-
-
     // ----- Temporarily Commented Out Testing ----- //
 
     //mygraph.printGraph();
